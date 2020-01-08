@@ -1,2 +1,2 @@
-Convinience utilities fro your `$HOME/bin`
+Convinience utilities for your `$HOME/bin`
 ---
