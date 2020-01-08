@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Update installed brew formulae
+
+brew upgrade
+brew cask reinstall $(brew cask outdated | cut -d ' ' -f 1) >/dev/null 2>&1
+brew cleanup

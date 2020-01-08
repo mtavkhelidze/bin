@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# update local or global installed npm packages
+
+function usage() {
+    echo "Usage: $(basename $0) [-u -g -h]" 1>&2
+    echo "Options are:" 1>&2
+    echo "  -u update packages" 1>&2
+    echo "  -g go global" 1>&2
+    echo "  -h show this help" 1>&2
+    echo "If not options are given, local packages will be listed." 1>&2
+    exit 1
+}
+
+global=""
+update=""
+
+while getopts "ugh" o; do
+    case "${o}" in
+        u)
+            update="1"
+            ;;
+        g)
+            global="--global"
+            ;;
+	h)
+	    usage
+	    ;;
+	*)
+	    ;;
+    esac
+done
+
+
+
+packages=$(npm $global list -depth 0 --parseable 2>/dev/null | tail -n +2 | xargs basename)
+
+if [[ -z $update ]]; then
+    echo $packages | tr " " "\n"
+else
+    npm install $global $packages
+fi
