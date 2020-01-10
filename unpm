@@ -33,10 +33,21 @@ done
 
 
 
-packages=$(npm $global list -depth 0 --parseable 2>/dev/null | tail -n +2 | xargs basename)
+packages=$(npm $global list -depth 0 --parseable 2>/dev/null | tail -n +2 | xargs basename | grep -v npm)
 
 if [[ -z $update ]]; then
+    case "$global" in
+	--global) location="GLOBAL" ;;
+	*) location="LOCAL" ;;
+    esac
+    msg="Listing ${location} packages. Run $(basename $0) -h for other options."
+    echo $msg
+    yes "-" | tr -d '\n' | head -c ${#msg}
+    echo
     echo $packages | tr " " "\n"
 else
     npm install $global $packages
+    if [[ -n $global ]]; then
+	npm install --global --force npm
+    fi
 fi
